@@ -8,7 +8,7 @@ plugins {
 
 archivesBaseName = 'vertx-web-validator-kotlin'
 group = 'net.termer.vertx.kotlin.validation'
-version = '1.0.0'
+version = '1.0.1'
 
 repositories {
     jcenter()
@@ -85,9 +85,17 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'net.termer.vertx.kotlin.validation'
             artifactId = 'vertx-web-validator-kotlin'
-            version = '1.0.0'
+            version = '1.0.1'
 
-            artifact(tasks['javadocJar'])
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
 
             pom {
                 name = 'vertx-web-validator-kotlin'
