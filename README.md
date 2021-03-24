@@ -111,8 +111,8 @@ class CommaSeparatedArrayValidator: ParamValidator {
 Now when you get the parsed value of this parameter, you will get an array of strings.
 
 # Documentation
-The KDoc is available [here](https://termer.net/kdoc/vertx-web-validator-kotlin/1.0.0/).
-The javadoc is available [here](https://termer.net/javadoc/vertx-web-validator-kotlin/1.0.0/) and on Maven Central.
+The KDoc is available [here](https://termer.net/kdoc/vertx-web-validator-kotlin/1.0.0/index.html).
+The javadoc is available [here](https://termer.net/javadoc/vertx-web-validator-kotlin/1.0.0/index.html) and on Maven Central.
 
 # License
 This project is licensed under the MIT license, so it is freely usable in any project.
