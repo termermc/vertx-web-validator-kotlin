@@ -28,7 +28,7 @@ val v = RequestValidator()
         .optionalParam("email", EmailValidator())
 		.optionalParam("favoriteFood", StringValidator()
                 .minLength(3)
-                .maxLength(16), "unspecified")
+                .maxLength(16, "unspecified")
 
 if(v.validate(routingContext)) {
 	// Collect parsed parameters
