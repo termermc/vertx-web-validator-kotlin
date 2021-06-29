@@ -22,31 +22,31 @@ val v = RequestValidator()
 		.param("name", StringValidator()
 				.noNewlinesOrControlChars()
 				.maxLength(16))
-        .param("age", IntValidator()
-                .min(13)
-                .max(99))
-        .optionalParam("email", EmailValidator())
+		.param("age", IntValidator()
+				.min(13)
+				.max(99))
+		.optionalParam("email", EmailValidator())
 		.optionalParam("favoriteFood", StringValidator()
-                .minLength(3)
-                .maxLength(16, "unspecified")
+				.minLength(3)
+				.maxLength(16), "unspecified")
 
 if(v.validate(routingContext)) {
 	// Collect parsed parameters
 	val name = v.parsedParam("name") as String // A non-nullable string, since we know for sure that "name" is present
-    val age = v.parsedParam("age") as Int // A non-nullable int, since we know for sure that "age" is an integer, and is present
-    val email = v.parsedParam("email") as String? // A nullable string, since we're not certain whether email was provided
-    val favoriteFood = v.parsedParam("favoriteFood") as String // A non-nullable string, since it is present, or a default value was used
-    
-    // Send response
-    val res = routingContext.response()
-    
-    res.send("Your name is $name\n")
-    res.send("Your age is $age\n")
-    if(email != null)
-    	res.send("Your email is $email\n")
-    res.send("Your favorite food is $favoriteFood")
-    
-    res.end()
+	val age = v.parsedParam("age") as Int // A non-nullable int, since we know for sure that "age" is an integer, and is present
+	val email = v.parsedParam("email") as String? // A nullable string, since we're not certain whether email was provided
+	val favoriteFood = v.parsedParam("favoriteFood") as String // A non-nullable string, since it is present, or a default value was used
+
+	// Send response
+	val res = routingContext.response()
+
+	res.send("Your name is $name\n")
+	res.send("Your age is $age\n")
+	if(email != null)
+		res.send("Your email is $email\n")
+	res.send("Your favorite food is $favoriteFood")
+
+	res.end()
 } else {
 	routingContext.response().end("${v.validationErrorParam}: ${v.validationErrorText}")
 }
