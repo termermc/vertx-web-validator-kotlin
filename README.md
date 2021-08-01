@@ -2,7 +2,7 @@
 A simple Kotlin library for null-safe Vert.x Web request validation
 
 # 中文
-你在可以[这里](README_zh.md)读中文指南。
+你可以在[这里](README_zh.md)读中文指南。
 
 # Intro
 Vert.x Web is a powerful framework for web development, but up until recently, it lacked a request validator.
