@@ -1,6 +1,9 @@
 # vertx-web-validator-kotlin
 A simple Kotlin library for null-safe Vert.x Web request validation
 
+# 中文
+你在[这里](README_zh.md)可以读中文指南。
+
 # Intro
 Vert.x Web is a powerful framework for web development, but up until recently, it lacked a request validator.
 In Vert.x 4, a scheme-based validator was released, but it is not nearly as simple as a fluent API for validation.
@@ -54,7 +57,7 @@ if(v.validate(routingContext)) {
 
 It's very simple and does not require any special routing. It is safe to use in normal routes and middleware.
 
-# Creating your own validators
+# Creating Your Own Validators
 
 There are many built-in validators that handle numbers, strings, emails, dates, and JSON, but you are also free to create your own validators for your own specific use-cases.
 This is trivial to do, because all validators implement the ParamValidator interface, which at its most basic level validates a string and sends a status back, optionally parsing the provided string into another type of value.
@@ -116,3 +119,6 @@ The javadoc is available [here](https://termer.net/javadoc/vertx-web-validator-k
 
 # License
 This project is licensed under the MIT license, so it is freely usable in any project.
+
+# Contact the author
+My contact details are [here](https://termer.net/who).
