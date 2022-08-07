@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for StringValidator
+ * Tests for [StringValidator]
  * @author termer
  */
 class StringValidatorTest {
@@ -20,7 +20,7 @@ class StringValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = "Hello world"
@@ -38,7 +38,7 @@ class StringValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = "Hello world"
@@ -56,7 +56,7 @@ class StringValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = "hello world"
@@ -74,7 +74,7 @@ class StringValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = "HELLO WORLD"

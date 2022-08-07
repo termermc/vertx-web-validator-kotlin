@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for DoubleValidator
+ * Tests for [DoubleValidator]
  * @author termer
  */
 class DoubleValidatorTest {
@@ -20,7 +20,7 @@ class DoubleValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = 1.5
@@ -76,7 +76,7 @@ class DoubleValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = -2.1
@@ -94,7 +94,7 @@ class DoubleValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = 2.1

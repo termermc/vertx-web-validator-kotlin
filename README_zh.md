@@ -10,10 +10,10 @@ Vert.x Web是一个强大的网络开发框架，但是除了最近，没有请�
 这库努力让你享受NodeJS世界的[express-validator](https://express-validator.github.io/docs/)类型的简单在你的Vert.x Web项目。
 
 # 设定
-用你的最爱的工具导入程序库。以下是一个Gradle例子：
+用你最爱的工具导入程序库。以下是一个Gradle例子：
 
 ```groovy
-implementation 'net.termer.vertx.kotlin.validation:vertx-web-validator-kotlin:1.0.1'
+implementation 'net.termer.vertx.kotlin.validation:vertx-web-validator-kotlin:2.0.0'
 ```
 
 这是请求处理程序例子。接受使用者资料：
@@ -112,7 +112,8 @@ class CommaSeparatedArrayValidator: ParamValidator {
 现在，当你取得参数的解析值，你就取得字符串数组
 
 # 单证
-KDoc可在[这里](https://termer.net/kdoc/vertx-web-validator-kotlin/1.0.1/index.html)和Maven Central获得
+KDoc可在[这里](https://termer.net/kdoc/vertx-web-validator-kotlin/2.0.0/index.html)和Maven Central获得
+javadoc可在[这里](https://termer.net/javadoc/vertx-web-validator-kotlin/2.0.0/index.html)和Maven Central获得.
 
 # 许可证
 这项目使用MIT许可证，所以你可以在任何项目中自由使用它。

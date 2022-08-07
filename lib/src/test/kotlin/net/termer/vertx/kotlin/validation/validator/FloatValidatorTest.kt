@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for FloatValidator
+ * Tests for [FloatValidator]
  * @author termer
  */
 class FloatValidatorTest {
@@ -20,7 +20,7 @@ class FloatValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = 1.5F
@@ -76,7 +76,7 @@ class FloatValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = -2.1F
@@ -94,7 +94,7 @@ class FloatValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = 2.1F

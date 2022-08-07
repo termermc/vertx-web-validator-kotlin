@@ -1,6 +1,7 @@
 package net.termer.vertx.kotlin.validation.validator
 
 import net.termer.vertx.kotlin.validation.ParamValidator
+import net.termer.vertx.kotlin.validation.RequestValidationError
 
 /**
  * Validator for email parameters
@@ -20,17 +21,17 @@ open class EmailValidator: ParamValidator {
 
 		// Length checks
 		if(minLen != null && str.length < minLen!!)
-			return ParamValidator.ValidatorResponse("INVALID_LENGTH", "The provided email is too short (minimum length is $minLen)")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_LENGTH, "The provided email is too short (minimum length is $minLen)")
 		if(maxLen != null && str.length > maxLen!!)
-			return ParamValidator.ValidatorResponse("INVALID_LENGTH", "The provided email is too long (maximum length is $maxLen)")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_LENGTH, "The provided email is too long (maximum length is $maxLen)")
 
 		// Check if blank
 		if(str.isBlank())
-			return ParamValidator.ValidatorResponse("BLANK_STRING", "The provided email is blank")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.BLANK_STRING, "The provided email is blank")
 
 		// Check for regex
 		if(!str.matches(Regex("^[\\w.]+@[a-zA-Z_0-9\\-.]+?\\.[a-zA-Z]{2,16}\$")))
-			return ParamValidator.ValidatorResponse("INVALID_EMAIL", "The provided email is not valid")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_EMAIL, "The provided email is not valid")
 
 		return ParamValidator.ValidatorResponse(str)
 	}

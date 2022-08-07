@@ -4,6 +4,7 @@ import io.vertx.core.json.DecodeException
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import net.termer.vertx.kotlin.validation.ParamValidator
+import net.termer.vertx.kotlin.validation.RequestValidationError
 
 /**
  * Validator for JSON array parameters
@@ -25,18 +26,15 @@ open class JsonArrayValidator: ParamValidator {
 
 			// Check length
 			if(minLen != null && list.size < minLen!!)
-				return ParamValidator.ValidatorResponse("INVALID_LENGTH", "The JSON array is too short (minimum length is $minLen)")
+				return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_LENGTH, "The JSON array is too short (minimum length is $minLen)")
 			if(maxLen != null && list.size > maxLen!!)
-				return ParamValidator.ValidatorResponse("INVALID_LENGTH", "The JSON array is too long (maximum length is $maxLen)")
+				return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_LENGTH, "The JSON array is too long (maximum length is $maxLen)")
 
 			// Check for nulls
-			if(noNulls || allowedTypes != null) {
-				for((i, item) in list.withIndex()) {
-					if(item == null) {
-						return ParamValidator.ValidatorResponse("INVALID_ITEM", "The JSON array cannot contain any nulls, and the item at index $i is null")
-					}
-				}
-			}
+			if(noNulls || allowedTypes != null)
+				for((i, item) in list.withIndex())
+					if(item == null)
+						return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_ITEM, "The JSON array cannot contain any nulls, and the item at index $i is null")
 
 			// Validate types
 			if(allowedTypes != null) {
@@ -50,7 +48,7 @@ open class JsonArrayValidator: ParamValidator {
 					}
 
 					if(!goodType)
-						return ParamValidator.ValidatorResponse("INVALID_ITEM", "The item at index $i of the JSON array is not the correct type")
+						return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_ITEM, "The item at index $i of the JSON array is not the correct type")
 				}
 			}
 
@@ -79,7 +77,7 @@ open class JsonArrayValidator: ParamValidator {
 
 			return ParamValidator.ValidatorResponse(arr)
 		} catch(e: DecodeException) {
-			return ParamValidator.ValidatorResponse("INVALID_JSON", "The provided value does not represent a JSON array")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_JSON, "The provided value does not represent a JSON array")
 		}
 	}
 

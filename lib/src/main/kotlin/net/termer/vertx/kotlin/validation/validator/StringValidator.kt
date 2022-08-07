@@ -1,6 +1,7 @@
 package net.termer.vertx.kotlin.validation.validator
 
 import net.termer.vertx.kotlin.validation.ParamValidator
+import net.termer.vertx.kotlin.validation.RequestValidationError
 
 /**
  * Validator for String parameters
@@ -73,51 +74,51 @@ open class StringValidator: ParamValidator {
 		if(trim)
 			str = str.trim()
 		if(toLowerCase)
-			str = str.toLowerCase()
+			str = str.lowercase()
 		if(toUpperCase)
-			str = str.toUpperCase()
+			str = str.uppercase()
 
 		// Length checks
 		if(minLen != null && str.length < minLen!!)
-			return ParamValidator.ValidatorResponse("INVALID_LENGTH", "The provided string is too short (minimum length is $minLen)")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_LENGTH, "The provided string is too short (minimum length is $minLen)")
 		if(maxLen != null && str.length > maxLen!!)
-			return ParamValidator.ValidatorResponse("INVALID_LENGTH", "The provided string is too long (maximum length is $maxLen)")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_LENGTH, "The provided string is too long (maximum length is $maxLen)")
 
 		// Check if it only has required characters
 		if(reqChars != null)
 			for(char in str.toCharArray())
 				if(!reqChars!!.contains(char))
-					return ParamValidator.ValidatorResponse("INVALID_CHARS", "The provided string contains invalid characters")
+					return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_CHARS, "The provided string contains invalid characters")
 
 		// Check if it contains denied characters
 		if(denyChars != null)
 			for(char in str.toCharArray())
 				if(denyChars!!.contains(char))
-					return ParamValidator.ValidatorResponse("INVALID_CHARS", "The provided string contains invalid characters")
+					return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_CHARS, "The provided string contains invalid characters")
 
 		// Check for case
 		if(uppercase)
 			for(char in str.toCharArray())
-				if(char != char.toUpperCase())
-					return ParamValidator.ValidatorResponse("INVALID_CASE", "The provided string contains lowercase characters")
+				if(char != char.uppercaseChar())
+					return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_CASE, "The provided string contains lowercase characters")
 		if(lowercase)
 			for(char in str.toCharArray())
-				if(char != char.toLowerCase())
-					return ParamValidator.ValidatorResponse("INVALID_CASE", "The provided string contains uppercase characters")
+				if(char != char.lowercaseChar())
+					return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_CASE, "The provided string contains uppercase characters")
 
 		// Check if blank
 		if(notBlank && str.isBlank())
-			return ParamValidator.ValidatorResponse("BLANK_STRING", "The provided string is blank")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.BLANK_STRING, "The provided string is blank")
 
 		// Check for regex
 		if(regex != null && !regex!!.matches(str))
-			return ParamValidator.ValidatorResponse("INVALID_PATTERN", "The provided string does not match the required pattern")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.PATTERN_MISMATCH, "The provided string does not match the required pattern")
 
 		// Check if (not) in arrays
 		if(isInArray != null && !isInArray!!.contains(str))
-			return ParamValidator.ValidatorResponse("INVALID_VALUE", "The provided string is not one of the following: ${isInArray!!.joinToString(", ")}")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_VALUE, "The provided string is not one of the following: ${isInArray!!.joinToString(", ")}")
 		if(isNotInArray != null && isNotInArray!!.contains(str))
-			return ParamValidator.ValidatorResponse("INVALID_VALUE", "The provided string cannot be any of the following: ${isNotInArray!!.joinToString(", ")}")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_VALUE, "The provided string cannot be any of the following: ${isNotInArray!!.joinToString(", ")}")
 
 		return ParamValidator.ValidatorResponse(str)
 	}

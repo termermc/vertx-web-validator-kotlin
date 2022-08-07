@@ -1,14 +1,17 @@
 package net.termer.vertx.kotlin.validation
 
+import net.termer.vertx.kotlin.validation.exception.RequestValidationException
 import net.termer.vertx.kotlin.validation.fake.FakeRoutingContext
 import net.termer.vertx.kotlin.validation.validator.AnyValidator
 import net.termer.vertx.kotlin.validation.validator.IntValidator
+import net.termer.vertx.kotlin.validation.validator.NoneValidator
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 /**
- * Tests tasks specifically relating to RequestValidator
+ * Tests specifically relating to [RequestValidator]
  * @author termer
  */
 class RequestValidatorTest {
@@ -25,9 +28,6 @@ class RequestValidatorTest {
 
 		val valid = v.validate(r)
 
-		if(!valid)
-			println("Param ${v.validationErrorParam} cannot be validated: ${v.validationErrorText} (${v.validationErrorType})")
-
 		assert(valid)
 	}
 
@@ -43,9 +43,6 @@ class RequestValidatorTest {
 				.optionalRouteParam("routeParamWithValue", AnyValidator(), "routeValue")
 
 		val valid = v.validate(r)
-
-		if(!valid)
-			println("Param ${v.validationErrorParam} cannot be validated: ${v.validationErrorText} (${v.validationErrorType})")
 
 		assert(valid)
 
@@ -73,9 +70,6 @@ class RequestValidatorTest {
 
 		val valid = v.validate(r)
 
-		if(!valid)
-			println("Param ${v.validationErrorParam} cannot be validated: ${v.validationErrorText} (${v.validationErrorType})")
-
 		assert(valid)
 
 		// Check for parsed values
@@ -86,7 +80,7 @@ class RequestValidatorTest {
 	}
 
 	@Test
-	fun `Report missing params`() {
+	fun `Report single missing param`() {
 		val r = FakeRoutingContext()
 
 		val v = RequestValidator()
@@ -94,10 +88,66 @@ class RequestValidatorTest {
 
 		val valid = v.validate(r)
 
+		// Returns invalid
 		assert(!valid)
 
-		assertEquals(v.validationErrorType, "MISSING_PARAM")
-		assertEquals(v.validationErrorParam, "paramName")
-		assert(v.validationErrorText!!.contains("paramName"))
+		// Only has one validation error
+		assertEquals(v.validationErrors.size, 1)
+		val error = v.validationErrors[0]
+
+		// Verify error is correct
+		assertEquals(error.type, RequestValidationError.DefaultType.MISSING_PARAM)
+		assertEquals(error.param, "paramName")
+		assert(error.message.contains("paramName"))
+	}
+
+	@Test
+	fun `Report multiple missing params`() {
+		val r = FakeRoutingContext()
+		r.request().params()["param1"] = "test data"
+		r.request().params()["param2"] = "stuff"
+		r.request().params()["param3"] = "things"
+
+		val v = RequestValidator()
+			.param("param1", NoneValidator())
+			.param("param2", NoneValidator())
+			.param("param3", AnyValidator())
+
+		val valid = v.validate(r)
+
+		assert(!valid)
+		assertEquals(v.validationErrors.size, 2)
+	}
+
+	@Test
+	fun `Parse valid params even if there are bad params`() {
+		val r = FakeRoutingContext()
+		r.request().params()["bad"] = "test data"
+		r.request().params()["good"] = "100"
+
+		val v = RequestValidator()
+			.param("bad", NoneValidator())
+			.param("good", IntValidator())
+
+		val valid = v.validate(r)
+
+		assert(!valid)
+		assertEquals(v.validationErrors.size, 1)
+
+		assert(v.isParamParsed("good"))
+		assertEquals(v.parsedParam("good"), 100)
+	}
+
+	@Test
+	fun `validateOrThrowException throws an exception on bad params`() {
+		val r = FakeRoutingContext()
+		r.request().params()["bad"] = "test data"
+
+		val v = RequestValidator()
+			.param("bad", NoneValidator())
+
+		assertThrows<RequestValidationException> {
+			v.validateOrThrowException(r)
+		}
 	}
 }

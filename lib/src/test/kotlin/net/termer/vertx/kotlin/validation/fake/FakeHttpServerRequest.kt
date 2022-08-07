@@ -1,5 +1,6 @@
 package net.termer.vertx.kotlin.validation.fake
 
+import io.netty.handler.codec.DecoderResult
 import io.vertx.core.Future
 import io.vertx.core.Handler
 import io.vertx.core.MultiMap
@@ -12,7 +13,7 @@ import javax.security.cert.X509Certificate
 class FakeHttpServerRequest: HttpServerRequest {
 	private val params = caseInsensitiveMultiMap()
 
-	constructor() {
+	init {
 		params["wow"] = "woo"
 	}
 
@@ -80,6 +81,14 @@ class FakeHttpServerRequest: HttpServerRequest {
 		TODO("Not yet implemented")
 	}
 
+	override fun setParamsCharset(charset: String?): HttpServerRequest {
+		TODO("Not yet implemented")
+	}
+
+	override fun getParamsCharset(): String {
+		TODO("Not yet implemented")
+	}
+
 	override fun params(): MultiMap = params
 
 	override fun peerCertificateChain(): Array<X509Certificate> {
@@ -142,7 +151,27 @@ class FakeHttpServerRequest: HttpServerRequest {
 		TODO("Not yet implemented")
 	}
 
+	override fun decoderResult(): DecoderResult {
+		TODO("Not yet implemented")
+	}
+
+	override fun getCookie(name: String?): Cookie {
+		TODO("Not yet implemented")
+	}
+
+	override fun getCookie(name: String?, domain: String?, path: String?): Cookie {
+		TODO("Not yet implemented")
+	}
+
 	override fun cookieMap(): MutableMap<String, Cookie> {
+		TODO("Not yet implemented")
+	}
+
+	override fun cookies(name: String?): MutableSet<Cookie> {
+		TODO("Not yet implemented")
+	}
+
+	override fun cookies(): MutableSet<Cookie> {
 		TODO("Not yet implemented")
 	}
 }

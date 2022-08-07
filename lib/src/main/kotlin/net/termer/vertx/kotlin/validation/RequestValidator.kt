@@ -2,6 +2,7 @@ package net.termer.vertx.kotlin.validation
 
 import io.vertx.core.MultiMap
 import io.vertx.ext.web.RoutingContext
+import net.termer.vertx.kotlin.validation.exception.RequestValidationException
 
 /**
  * Simple pluggable request validator
@@ -16,29 +17,21 @@ class RequestValidator {
 	private val parsedRouteParams = HashMap<String, Any?>()
 
 	private var valid = false
-	private var errorType: String? = null
-	private var errorText: String? = null
-	private var errorParam: String? = null
+	private var errors: Array<RequestValidationError> = emptyArray()
 
 	/**
-	 * The validation result's error type, if it failed
-	 * @since 1.0.0
+	 * Returns whether the request was found to be valid after calling [validate].
+	 * Will return false if [validate] has not been called yet.
+	 * @since 2.0.0
 	 */
-	val validationErrorType: String?
-		get() = errorType
+	val isValid: Boolean
+		get() = valid
 	/**
-	 * The validation result's plaintext error, if it failed
-	 * @since 1.0.0
+	 * All validation errors found after calling [validate]
+	 * @since 2.0.0
 	 */
-	val validationErrorText: String?
-		get() = errorText
-
-	/**
-	 * The name of the parameter that failed validation, if it failed
-	 * @since 1.0.0
-	 */
-	val validationErrorParam: String?
-		get() = errorParam
+	val validationErrors: Array<RequestValidationError>
+		get() = errors
 
 	/**
 	 * Registers a parameter validator for the specified parameter name
@@ -110,75 +103,83 @@ class RequestValidator {
 		return this
 	}
 
-	fun validate(r: RoutingContext): Boolean {
-		val params: MultiMap = r.request().params()
-		val routeParams = r.pathParams()
+	/**
+	 * Validates a request using this validator and all its options.
+	 * Returns true if the validation was successful, false if there were any parameters that did not pass validation.
+	 * @param ctx The routing context of the request to validate
+	 * @return Whether the validation was successful
+	 * @since 2.0.0
+	 */
+	fun validate(ctx: RoutingContext): Boolean {
+		val params: MultiMap = ctx.request().params()
+		val routeParams = ctx.pathParams()
+
+		// Errors found while validating params
+		val errorsList = arrayListOf<RequestValidationError>()
 
 		// Validate params
 		for((key, validator) in paramValidators.entries) {
 			if(params.contains(key)) {
-				val param = ParamValidator.Param(key, params[key]!!, r)
+				val param = ParamValidator.Param(key, params[key]!!, ctx)
 
 				// Validate parameter
 				val res = validator.paramValidator.validate(param)
 
-				// Assign parsed value, otherwise end with error
-				if(res.valid) {
+				// Assign parsed value, otherwise add error to list
+				if(res.valid)
 					parsedParams[key] = res.result
-				} else {
-					errorType = res.errorType
-					errorText = res.errorText
-					errorParam = key
-					valid = false
-					return false
-				}
+				else
+					errorsList.add(RequestValidationError(res.errorType!!, res.errorMessage!!, key))
 			} else if(validator.optional) {
 				// Assign default value if one is defined
 				if(validator.default != null)
 					parsedParams[key] = validator.default
 			} else {
-				// End with missing parameter error
-				errorType = "MISSING_PARAM"
-				errorText = "Missing parameter \"$key\""
-				errorParam = key
-				valid = false
-				return false
+				// Add missing parameter error to list
+				errorsList.add(RequestValidationError(RequestValidationError.DefaultType.MISSING_PARAM, "Missing parameter \"$key\"", key))
 			}
 		}
 
 		// Validate route params
 		for((key, validator) in routeParamValidators.entries) {
 			if(routeParams.contains(key)) {
-				val param = ParamValidator.Param(key, routeParams[key]!!, r)
+				val param = ParamValidator.Param(key, routeParams[key]!!, ctx)
 
 				// Validate parameter
 				val res = validator.paramValidator.validate(param)
 
-				// Assign parsed value, otherwise end with error
-				if(res.valid) {
+				// Assign parsed value, otherwise add error to list
+				if(res.valid)
 					parsedRouteParams[key] = res.result
-				} else {
-					errorType = res.errorType
-					errorText = res.errorText
-					errorParam = key
-					valid = false
-					return false
-				}
+				else
+					errorsList.add(RequestValidationError(res.errorType!!, res.errorMessage!!, key))
 			} else if(validator.optional) {
 				// Assign default value if one is defined
 				if(validator.default != null)
 					parsedRouteParams[key] = validator.default
 			} else {
-				// End with missing parameter error
-				errorType = "MISSING_ROUTE_PARAM"
-				errorText = "Missing route parameter \"$key\""
-				errorParam = key
-				valid = false
-				return false
+				// Add missing parameter error to list
+				errorsList.add(RequestValidationError(RequestValidationError.DefaultType.MISSING_ROUTE_PARAM, "Missing route parameter \"$key\"", key))
 			}
 		}
 
-		return true
+		// Determine validity and populate errors array
+		valid = errorsList.isEmpty()
+		errors = errorsList.toTypedArray()
+
+		return valid
+	}
+
+	/**
+	 * Validates a request using this validator and all its options.
+	 * Throws a [RequestValidationException] if the validation failed.
+	 * @param ctx The routing context of the request to validate
+	 * @throws RequestValidationException If the validation failed
+	 * @since 2.0.0
+	 */
+	fun validateOrThrowException(ctx: RoutingContext) {
+		if(!validate(ctx))
+			throw RequestValidationException("Validation failed (${errors.size} error(s) found during validation)", this, ctx)
 	}
 
 	/**

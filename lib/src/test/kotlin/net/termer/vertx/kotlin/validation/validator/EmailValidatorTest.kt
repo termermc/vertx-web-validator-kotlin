@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for EmailValidator
+ * Tests for [EmailValidator]
  * @author termer
  */
 class EmailValidatorTest {
@@ -20,7 +20,7 @@ class EmailValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = "me@example.com"
@@ -38,7 +38,7 @@ class EmailValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = "me@example.com"
@@ -81,7 +81,7 @@ class EmailValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 	}
@@ -96,7 +96,7 @@ class EmailValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 	}

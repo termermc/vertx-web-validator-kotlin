@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for LongValidator
+ * Tests for [LongValidator]
  * @author termer
  */
 class LongValidatorTest {
@@ -20,7 +20,7 @@ class LongValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = 5L
@@ -76,7 +76,7 @@ class LongValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = 0L
@@ -94,7 +94,7 @@ class LongValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = 0L

@@ -14,7 +14,7 @@ It aims to provide the simplicity of libraries like [express-validator](https://
 Include the library using your favorite build tool. Here is a snippet for Gradle:
 
 ```groovy
-implementation 'net.termer.vertx.kotlin.validation:vertx-web-validator-kotlin:1.0.1'
+implementation 'net.termer.vertx.kotlin.validation:vertx-web-validator-kotlin:2.0.0'
 ```
 
 Here is an example of what you might put inside a request handler that takes in information about a person:
@@ -114,8 +114,10 @@ class CommaSeparatedArrayValidator: ParamValidator {
 Now when you get the parsed value of this parameter, you will get an array of strings.
 
 # Documentation
-The KDoc is available [here](https://termer.net/kdoc/vertx-web-validator-kotlin/1.0.1/index.html).
-The javadoc is available [here](https://termer.net/javadoc/vertx-web-validator-kotlin/1.0.1/index.html) and on Maven Central.
+The KDoc is available [here](https://termer.net/kdoc/vertx-web-validator-kotlin/2.0.0/index.html).
+The javadoc is available [here](https://termer.net/javadoc/vertx-web-validator-kotlin/2.0.0/index.html) and on Maven Central.
+
+Documentation can be rendered using the following commands: `gradlew kdoc`, `gradlew javadoc`
 
 # License
 This project is licensed under the MIT license, so it is freely usable in any project.

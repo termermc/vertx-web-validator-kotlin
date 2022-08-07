@@ -7,7 +7,7 @@ import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 
 /**
- * Tests for OffsetDateTimeValidator
+ * Tests for [OffsetDateTimeValidator]
  * @author termer
  */
 class OffsetDateTimeValidatorTest {
@@ -21,7 +21,7 @@ class OffsetDateTimeValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = OffsetDateTime.parse("2021-03-24T01:22:26.400Z")
@@ -65,7 +65,7 @@ class OffsetDateTimeValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = OffsetDateTime.parse("2021-03-25T01:46:43.700Z")
@@ -83,7 +83,7 @@ class OffsetDateTimeValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = OffsetDateTime.parse("2021-03-23T01:46:43.700Z")

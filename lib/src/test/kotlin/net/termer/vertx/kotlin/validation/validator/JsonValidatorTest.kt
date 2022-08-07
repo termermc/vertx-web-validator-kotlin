@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for JsonValidator
+ * Tests for [JsonValidator]
  * @author termer
  */
 class JsonValidatorTest {
@@ -21,7 +21,7 @@ class JsonValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected = JsonObject()

@@ -4,6 +4,7 @@ import io.vertx.core.json.DecodeException
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import net.termer.vertx.kotlin.validation.ParamValidator
+import net.termer.vertx.kotlin.validation.RequestValidationError
 
 /**
  * Validator for JSON object parameters
@@ -23,16 +24,16 @@ open class JsonValidator: ParamValidator {
 			// Validate field types
 			for((key, clazz) in reqs.entries) {
 				if(!map.containsKey(key)) {
-					return ParamValidator.ValidatorResponse("MISSING_FIELD", "The provided JSON object does not contain the field $key")
+					return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.MISSING_FIELD, "The provided JSON object does not contain the field $key")
 				} else if(clazz != null && !clazz.isAssignableFrom(map[key]!!::class.java)) {
-					return ParamValidator.ValidatorResponse("INVALID_FIELD", "The field $key in the provided JSON object is not the correct type")
+					return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_FIELD, "The field $key in the provided JSON object is not the correct type")
 				}
 			}
 
 			// Validate fields
 			for((key, validator) in paramValidators.entries) {
 				if(!map.containsKey(key)) {
-					return ParamValidator.ValidatorResponse("MISSING_FIELD", "The provided JSON object does not contain the field $key")
+					return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.MISSING_FIELD, "The provided JSON object does not contain the field $key")
 				} else {
 					// Convert param to string
 					@Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
@@ -56,7 +57,7 @@ open class JsonValidator: ParamValidator {
 
 			return ParamValidator.ValidatorResponse(json)
 		} catch(e: DecodeException) {
-			return ParamValidator.ValidatorResponse("INVALID_JSON", "The provided value does not represent a JSON object")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_JSON, "The provided value does not represent a JSON object")
 		}
 	}
 

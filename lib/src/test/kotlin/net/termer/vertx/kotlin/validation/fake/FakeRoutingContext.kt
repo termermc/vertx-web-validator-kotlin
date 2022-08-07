@@ -18,25 +18,34 @@ class FakeRoutingContext: RoutingContext {
 	private val pathParams = HashMap<String, String>()
 	private val req = FakeHttpServerRequest()
 
+	var nextCalled = false
+	var failCalled = false
+	var failStatus: Int? = null
+	var failThrowable: Throwable? = null
+
 	override fun request() = req
 	override fun response(): HttpServerResponse {
 		TODO("Not yet implemented")
 	}
 
 	override fun next() {
-		TODO("Not yet implemented")
+		nextCalled = true
 	}
 
 	override fun fail(statusCode: Int) {
-		TODO("Not yet implemented")
+		failCalled = true
+		failStatus = statusCode
 	}
 
 	override fun fail(throwable: Throwable?) {
-		TODO("Not yet implemented")
+		failCalled = true
+		failThrowable = throwable
 	}
 
 	override fun fail(statusCode: Int, throwable: Throwable?) {
-		TODO("Not yet implemented")
+		failCalled = true
+		failStatus = statusCode
+		failThrowable = throwable
 	}
 
 	override fun put(key: String?, obj: Any?): RoutingContext {
@@ -44,6 +53,10 @@ class FakeRoutingContext: RoutingContext {
 	}
 
 	override fun <T : Any?> get(key: String?): T {
+		TODO("Not yet implemented")
+	}
+
+	override fun <T : Any?> get(key: String?, defaultValue: T): T {
 		TODO("Not yet implemented")
 	}
 
@@ -111,7 +124,11 @@ class FakeRoutingContext: RoutingContext {
 		TODO("Not yet implemented")
 	}
 
-	override fun fileUploads(): MutableSet<FileUpload> {
+	override fun body(): RequestBody {
+		TODO("Not yet implemented")
+	}
+
+	override fun fileUploads(): MutableList<FileUpload> {
 		TODO("Not yet implemented")
 	}
 

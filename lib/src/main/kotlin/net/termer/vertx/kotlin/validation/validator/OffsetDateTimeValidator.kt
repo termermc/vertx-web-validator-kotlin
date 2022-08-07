@@ -1,6 +1,7 @@
 package net.termer.vertx.kotlin.validation.validator
 
 import net.termer.vertx.kotlin.validation.ParamValidator
+import net.termer.vertx.kotlin.validation.RequestValidationError
 import java.time.OffsetDateTime
 import java.time.format.DateTimeParseException
 
@@ -24,13 +25,13 @@ open class OffsetDateTimeValidator: ParamValidator {
 			if(coerceMax != null && time.isAfter(coerceMax))
 				time = coerceMax
 			if(min != null && time.isBefore(min))
-				return ParamValidator.ValidatorResponse("INVALID_TIME", "The provided time is before the minimum allowed time ($min)")
+				return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_TIME, "The provided time is before the minimum allowed time ($min)")
 			if(max != null && time.isAfter(max))
-				return ParamValidator.ValidatorResponse("INVALID_TIME", "The provided time is after the maximum allowed time ($max)")
+				return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_TIME, "The provided time is after the maximum allowed time ($max)")
 
 			return ParamValidator.ValidatorResponse(time)
 		} catch(e: DateTimeParseException) {
-			return ParamValidator.ValidatorResponse("INVALID_DATE", "The provided value does not represent an ISO date string")
+			return ParamValidator.ValidatorResponse(RequestValidationError.DefaultType.INVALID_DATE, "The provided value does not represent an ISO date string")
 		}
 	}
 

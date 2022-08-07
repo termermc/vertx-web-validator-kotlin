@@ -59,16 +59,16 @@ interface ParamValidator {
 		val result: Any?
 
 		/**
-		 * The type of error (computer-friendly name) of the error in this parameter
+		 * The type (computer-friendly name) of the error in this parameter
 		 * @since 1.0.0
 		 */
 		val errorType: String?
 
 		/**
-		 * The plain text error in this parameter
-		 * @since 1.0.0
+		 * The plain text error message in this parameter
+		 * @since 2.0.0
 		 */
-		val errorText: String?
+		val errorMessage: String?
 
 		/**
 		 * Creates a succeeded response
@@ -78,7 +78,7 @@ interface ParamValidator {
 		constructor(res: Any) {
 			this.result = res
 			this.errorType = null
-			this.errorText = null
+			this.errorMessage = null
 			this.valid = true
 		}
 		/**
@@ -90,7 +90,7 @@ interface ParamValidator {
 		constructor(errorType: String, errorText: String) {
 			this.result = null
 			this.errorType = errorType
-			this.errorText = errorText
+			this.errorMessage = errorText
 			this.valid = false
 		}
 	}

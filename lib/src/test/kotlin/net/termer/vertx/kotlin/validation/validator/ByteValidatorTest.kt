@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for ByteValidator
+ * Tests for [ByteValidator]
  * @author termer
  */
 class ByteValidatorTest {
@@ -20,7 +20,7 @@ class ByteValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected: Byte = -128
@@ -38,7 +38,7 @@ class ByteValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected: Byte = -128
@@ -107,7 +107,7 @@ class ByteValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected: Byte = 0
@@ -125,7 +125,7 @@ class ByteValidatorTest {
 		val res = validator.validate(param)
 
 		if(!res.valid)
-			println(res.errorText)
+			println(res.errorMessage)
 
 		assert(res.valid)
 		val expected: Byte = 0
