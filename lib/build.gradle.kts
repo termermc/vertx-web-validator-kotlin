@@ -1,21 +1,39 @@
 import java.net.URI
 
-plugins {
-    kotlin("jvm") version "1.7.10"
+class Project {
+    companion object {
+        const val name = "vertx-web-validation-kotlin"
+        const val group = "net.termer.vertx.kotlin.validator"
+        const val version = "2.0.0"
+        const val repo = "github.com/termermc/vertx-web-validator-kotlin"
+        const val description = "A simple Kotlin library for null-safe Vert.x Web request validation"
+    }
+}
 
-    id("org.jetbrains.dokka") version "1.7.10"
+class Versions {
+    companion object {
+        const val jvm = "8"
+        const val kotlin = "1.7.10"
+        const val vertx = "4.3.2"
+        const val jupiter = "5.9.0"
+    }
+}
+
+group = Project.group
+version = Project.version
+description = Project.description
+
+plugins {
+    val ktVer = "1.7.10" // Versions.kotlin cannot be accessed in this scope
+
+    kotlin("jvm") version ktVer
+
+    id("org.jetbrains.dokka") version ktVer
     id("maven-publish")
     id("signing")
 
     `java-library`
 }
-
-group = "net.termer.vertx.kotlin.validation"
-version = "2.0.0"
-
-val archivesBaseName = "vertx-web-validator-kotlin"
-val projVersion = version as String
-val vertxVersion = "4.3.2"
 
 repositories {
     mavenCentral()
@@ -26,20 +44,20 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
     // Vert.x
-    compileOnly("io.vertx:vertx-core:$vertxVersion")
-    compileOnly("io.vertx:vertx-web:$vertxVersion")
-    testImplementation("io.vertx:vertx-core:$vertxVersion")
-    testImplementation("io.vertx:vertx-web:$vertxVersion")
+    compileOnly("io.vertx:vertx-core:${Versions.vertx}")
+    compileOnly("io.vertx:vertx-web:${Versions.vertx}")
+    testImplementation("io.vertx:vertx-core:${Versions.vertx}")
+    testImplementation("io.vertx:vertx-web:${Versions.vertx}")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
     // Testing
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${Versions.jupiter}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Versions.jupiter}")
 
     // Docs
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.10")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:${Versions.kotlin}")
 }
 
 tasks.test {
@@ -49,17 +67,17 @@ tasks.test {
 // Set JVM version
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of("8"))
+        languageVersion.set(JavaLanguageVersion.of(Versions.jvm))
     }
 }
 tasks.compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "1.${Versions.jvm}"
     }
 }
 tasks.compileTestKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "1.${Versions.jvm}"
     }
 }
 
@@ -79,8 +97,8 @@ tasks.create("javadocJar", org.gradle.jvm.tasks.Jar::class) {
 tasks.jar {
     manifest {
         attributes(
-            "Implementation-Title" to project.name,
-            "Implementation-Version" to project.version
+            "Implementation-Title" to Project.name,
+            "Implementation-Version" to Project.version
         )
     }
 }
@@ -91,15 +109,15 @@ java {
 }
 
 tasks.dokkaHtml {
-    moduleName.set(archivesBaseName)
+    moduleName.set(Project.name)
 }
 
 publishing {
     publications {
         create("mavenJava", MavenPublication::class) {
-            groupId = "net.termer.vertx.kotlin.validation"
-            artifactId = archivesBaseName
-            version = projVersion
+            groupId = Project.group
+            artifactId = Project.name
+            version = Project.version
 
             from(components["java"])
             versionMapping {
@@ -112,9 +130,9 @@ publishing {
             }
 
             pom {
-                name.set(archivesBaseName)
-                description.set("A simple Kotlin library for null-safe Vert.x Web request validation")
-                url.set("https://github.com/termermc/vertx-web-validator-kotlin")
+                name.set(Project.name)
+                description.set(Project.description)
+                url.set("https://${Project.repo}")
 
                 licenses {
                     license {
@@ -132,9 +150,9 @@ publishing {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/termermc/vertx-web-validator-kotlin.git")
-                    developerConnection.set("scm:git:ssh://github.com/termermc/vertx-web-validator-kotlin.git")
-                    url.set("https://github.com/termermc/vertx-web-validator-kotlin")
+                    connection.set("scm:git:git://${Project.repo}.git")
+                    developerConnection.set("scm:git:ssh://${Project.repo}.git")
+                    url.set("https://${Project.repo}")
                 }
             }
         }
